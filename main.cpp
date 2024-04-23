@@ -30,22 +30,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
-		Vector3 resultAdd = Add(v1, v2);
-		Vector3 resultSubtract = Subtract(v1, v2);
-		Vector3 resultMultipy =Multiply(k, v1);
-		float resultDot = Dot(v1, v2);
-		float resultLength = Length(v1);
-		Vector3 resultNormalize = Normalize(v2);
-
+		
 		///
 		/// ↑更新処理ここまで
 		///
-		VectorScreenprintf(0, 0, resultAdd, ":Add");
-		VectorScreenprintf(0, kRowHeight, resultSubtract, ":Subtract");
-		VectorScreenprintf(0, kRowHeight*2, resultMultipy, ":Multipy");
-		Novice::ScreenPrintf(0, kRowHeight * 3, "%02f :Dot", resultDot);
-		Novice::ScreenPrintf(0, kRowHeight * 4, "%02f :Length", resultLength);
-		VectorScreenprintf(0, kRowHeight * 5, resultNormalize, ":Normalize");
+		
 		///
 		/// ↓描画処理ここから
 		///
