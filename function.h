@@ -32,3 +32,7 @@ Matrix4x4 MakeIdetity4x4();
 static const int kRowHeight = 20;
 static const int kRColumnWidth = 60;
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix);
+
+
+Matrix4x4 MakeTranslateMatrix(Vector3 translate);
+Matrix4x4 MakeScaleMatrix(Vector3 scale); 
