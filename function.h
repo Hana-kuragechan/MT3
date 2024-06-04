@@ -1,5 +1,6 @@
 #pragma once
 #define _USE_MATH_DEFINES
+#include <cmath>
 #include <math.h>
 #include <assert.h>
 #include <Novice.h>
@@ -37,3 +38,7 @@ void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix);
 
 Matrix4x4 MakeTranslateMatrix(Vector3 translate);
 Matrix4x4 MakeScaleMatrix(Vector3 scale); 
+Matrix4x4 MakeRotateXMatrix(float radian);
+Matrix4x4 MakeRotateYMatrix(float radian);
+Matrix4x4 MakeRotateZMatrix(float radian);
+Matrix4x4 MakeRotateMatrix(Vector3 radian);
