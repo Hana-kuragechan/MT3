@@ -344,6 +344,4 @@ Matrix4x4 MakeRotateMatrix(Vector3 radian) {
 	return Multiply(Multiply(MakeRotateXMatrix(radian.x), MakeRotateYMatrix(radian.y)), MakeRotateZMatrix(radian.z));
 
 }
-Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
-	return Multiply(MakeScaleMatrix(scale), Multiply(MakeRotateMatrix(rotate), MakeTranslateMatrix(translate)));
-}
+
