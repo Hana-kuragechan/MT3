@@ -233,7 +233,7 @@ Matrix4x4 Transpose(const Matrix4x4& m)
 
 Matrix4x4 MakeIdetity4x4()
 {
-	Matrix4x4 result;
+	Matrix4x4 result{};
 	result.m[0][0] = 1.0f;
 	result.m[0][1] = 0;
 	result.m[0][2] = 0;
@@ -343,4 +343,7 @@ Matrix4x4 MakeRotateMatrix(Vector3 radian) {
 
 	return Multiply(Multiply(MakeRotateXMatrix(radian.x), MakeRotateYMatrix(radian.y)), MakeRotateZMatrix(radian.z));
 
+}
+Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+	return Multiply(MakeScaleMatrix(scale), Multiply(MakeRotateMatrix(rotate), MakeTranslateMatrix(translate)));
 }
