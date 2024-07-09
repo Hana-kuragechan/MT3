@@ -33,6 +33,9 @@ Matrix4x4 MakeIdetity4x4();
 
 static const int kRowHeight = 20;
 static const int kRColumnWidth = 60;
+static const int kWindowWidth = 1280;
+static const int kWindowHeight = 720;
+
 void MatrixScreenPrintf(int x, int y, const Matrix4x4& matrix);
 
 
@@ -47,3 +50,5 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip);
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth);
+
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
