@@ -536,3 +536,42 @@ bool IsCollision(const Sphere& s1, const Sphere& s2)
 	return false;
 }
 
+bool IsCollision(const Sphere& s, const Plane& p)
+{
+	if (s.radius >= fabsf(Dot(p.normal, s.center) - p.distance)) {
+		return true;
+	}
+	return false;
+}
+
+Vector3 Perpendicular(const Vector3& v)
+{
+	if (v.x != 0.0f || v.y != 0.0f) {
+		return{ -v.y,v.x,0.0f };
+	}
+
+	return { 0.0f,-v.z,v.y };
+}
+
+void DrawPlane(const Plane& p, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color)
+{
+	Vector3 center = Multiply(p.distance, p.normal);
+	Vector3 perpendiculars[4];
+	perpendiculars[0] = Normalize(Perpendicular(p.normal));
+	perpendiculars[1] = { -perpendiculars[0].x,-perpendiculars[0].y,-perpendiculars[0].z };
+	perpendiculars[2] = Cross(p.normal, perpendiculars[0]);
+	perpendiculars[3] = { -perpendiculars[2].x,-perpendiculars[2].y,-perpendiculars[2].z };
+
+	Vector3 points[4];
+	for (int32_t index = 0; index < 4; ++index) {
+		Vector3 extend = Multiply(2.0f, perpendiculars[index]);
+		Vector3 point = Add(center, extend);
+		points[index] = Transform(Transform(point, viewProjectionMatrix), viewportMatrix);
+	}
+	Novice::DrawLine(int(points[0].x), int(points[0].y), int(points[2].x), int(points[2].y), color);
+	Novice::DrawLine(int(points[1].x), int(points[1].y), int(points[2].x), int(points[2].y), color);
+	Novice::DrawLine(int(points[3].x), int(points[3].y), int(points[1].x), int(points[1].y), color);
+	Novice::DrawLine(int(points[3].x), int(points[3].y), int(points[0].x), int(points[0].y), color);
+}
+
+

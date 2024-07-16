@@ -34,6 +34,12 @@ struct Segment
 	Vector3 origin;
 	Vector3 diff;
 };
+struct Plane
+{
+	Vector3 normal;
+	float distance;
+};
+
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 Vector3 Subtract(const Vector3& v1, const Vector3& v2);
 Vector3 Multiply(float scalar, const Vector3& v);
@@ -81,3 +87,6 @@ Vector3 Project(const Vector3& v1, const Vector3& v2);
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 
 bool IsCollision(const Sphere& s1, const Sphere& s2);
+bool IsCollision(const Sphere& s, const Plane& p);
+Vector3 Perpendicular(const Vector3& v);
+void DrawPlane(const Plane& p, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
