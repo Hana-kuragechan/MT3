@@ -508,3 +508,22 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMa
 	}
 }
 
+Vector3 Project(const Vector3& v1, const Vector3& v2)
+{
+	Vector3 result{};
+	result.x = Dot(v1, Normalize(v2)) * Normalize(v2).x;
+	result.y = Dot(v1, Normalize(v2)) * Normalize(v2).y;
+	result.z = Dot(v1, Normalize(v2)) * Normalize(v2).z;
+ 
+	return result;
+}
+
+Vector3 ClosestPoint(const Vector3& point, const Segment& segment)
+{
+	Vector3 result;
+	result = Subtract(point, segment.origin);
+	result=Project(result, segment.diff);
+	result = Add(result, segment.origin);
+	return result;
+}
+
