@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <math.h>
@@ -86,7 +86,8 @@ void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMa
 Vector3 Project(const Vector3& v1, const Vector3& v2);
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 
-bool IsCollision(const Sphere& s1, const Sphere& s2);
-bool IsCollision(const Sphere& s, const Plane& p);
+bool IsCollision(const Sphere& s1, const Sphere& s2);//球と球
+bool IsCollision(const Sphere& s, const Plane& p);//球と平面
+bool IsCollision(const Segment& s, const Plane& p);
 Vector3 Perpendicular(const Vector3& v);
 void DrawPlane(const Plane& p, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);

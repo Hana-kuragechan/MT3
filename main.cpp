@@ -1,4 +1,4 @@
-#include <Novice.h>
+﻿#include <Novice.h>
 #include"function.h"
 #include<imgui.h>
 const char kWindowTitle[] = "GC_2B_10_タムラ_ハナコ";
@@ -16,10 +16,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 translate{};
 
 
-	Sphere sphere{ {0.0f, 0.0f, 0.0f}, 0.5f };
-	Plane plane{ {0.0f, -1.0f, 0.0f},{1.0f} };
+	Segment segment{ {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f} };
+	Plane plane{ {0.0f, 1.0f, 0.0f},{1.0f} };
 	uint32_t color = WHITE;
-		// キー入力結果を受け取る箱
+
+	Vector3 start;
+	Vector3 end;
+	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
@@ -44,7 +47,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 		Matrix4x4 viewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
 
-		if (IsCollision(sphere, plane)) {
+
+		if (IsCollision(segment, plane)) {
 			color = RED;
 		}
 		else {
@@ -52,12 +56,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		ImGui::DragFloat3("cameraRotate", &cameraRotate.x, 0.01f);
 		ImGui::DragFloat3("cameraTranslate", &cameraTranslate.x, 0.01f);
-		ImGui::DragFloat3("sphere1.center", &sphere.center.x, 0.01f);
-		ImGui::DragFloat3("sphere1.radius", &sphere.radius, 0.01f);
-		
+		ImGui::DragFloat3("sphere1.center", &segment.origin.x, 0.01f);
+	
 		plane.normal = Normalize(plane.normal);
 
+		start = Transform(Transform(segment.origin, worldViewProjectionMatrix), viewportMatrix);
+		end = Transform(Transform(Add(segment.origin, segment.diff), worldViewProjectionMatrix), viewportMatrix);
 
+		
 		///
 		/// ↑更新処理ここまで
 		///
@@ -66,7 +72,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 	
-		DrawSphere(sphere, worldViewProjectionMatrix, viewportMatrix, color);
+		Novice::DrawLine(int(start.x), int(start.y), int(end.x), int(end.y), color);
 		DrawPlane(plane, worldViewProjectionMatrix, viewportMatrix, WHITE);
 		DrawGrid(worldViewProjectionMatrix, viewportMatrix);
 

@@ -384,7 +384,7 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 	result.m[0][3] = 0;
 
 	result.m[1][0] = 0;
-	result.m[1][1] = 2/(top-bottom);
+	result.m[1][1] = 2 / (top - bottom);
 	result.m[1][2] = 0;
 	result.m[1][3] = 0;
 
@@ -514,7 +514,7 @@ Vector3 Project(const Vector3& v1, const Vector3& v2)
 	result.x = Dot(v1, Normalize(v2)) * Normalize(v2).x;
 	result.y = Dot(v1, Normalize(v2)) * Normalize(v2).y;
 	result.z = Dot(v1, Normalize(v2)) * Normalize(v2).z;
- 
+
 	return result;
 }
 
@@ -522,14 +522,14 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment)
 {
 	Vector3 result;
 	result = Subtract(point, segment.origin);
-	result=Project(result, segment.diff);
+	result = Project(result, segment.diff);
 	result = Add(result, segment.origin);
 	return result;
 }
 
 bool IsCollision(const Sphere& s1, const Sphere& s2)
 {
-	float distance = Length(Subtract(s2.center,s1.center));
+	float distance = Length(Subtract(s2.center, s1.center));
 	if (distance <= s1.radius + s2.radius) {
 		return true;
 	}
@@ -542,6 +542,21 @@ bool IsCollision(const Sphere& s, const Plane& p)
 		return true;
 	}
 	return false;
+}
+
+bool IsCollision(const Segment& s, const Plane& p)
+{
+	float dot = Dot(p.normal, s.diff);
+	if (dot == 0.0f) {
+		return false;
+	}
+	float t = (p.distance - Dot(s.origin, p.normal));
+	if (t <= 1.0f && t >= 0.0f) {
+		return true;
+	}
+
+	return false;
+
 }
 
 Vector3 Perpendicular(const Vector3& v)
