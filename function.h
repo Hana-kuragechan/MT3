@@ -43,6 +43,12 @@ struct  Triangle
 {
 	Vector3 vertices[3];
 };
+
+struct AABB {
+	Vector3 min;
+	Vector3 max;
+};
+
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 Vector3 Subtract(const Vector3& v1, const Vector3& v2);
 Vector3 Multiply(float scalar, const Vector3& v);
@@ -93,6 +99,9 @@ bool IsCollision(const Sphere& s1, const Sphere& s2);//球と球
 bool IsCollision(const Sphere& s, const Plane& p);//球と平面
 bool IsCollision(const Segment& s, const Plane& p);
 bool IsCollision(const Triangle& t, const Segment& s);
+bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+
 Vector3 Perpendicular(const Vector3& v);
 void DrawPlane(const Plane& p, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 void DrawTriangle(const Triangle& t, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
+void DrawAABB(const AABB& aabb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4 viewportMatrix, uint32_t color);

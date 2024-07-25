@@ -593,6 +593,16 @@ bool IsCollision(const Triangle& T, const Segment& s)
 	return true;
 }
 
+bool IsCollision(const AABB& aabb1, const AABB& aabb2)
+{
+	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) &&
+		(aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) &&
+		(aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
+		return true;
+	}
+	return false;
+}
+
 Vector3 Perpendicular(const Vector3& v)
 {
 	if (v.x != 0.0f || v.y != 0.0f) {
@@ -634,6 +644,50 @@ void DrawTriangle(const Triangle& t, const Matrix4x4& viewProjectionMatrix, cons
 		int(screenVertices[0].x), int(screenVertices[0].y), int(screenVertices[1].x), int(screenVertices[1].y),
 		int(screenVertices[2].x), int(screenVertices[2].y), color, kFillModeWireFrame
 	);
+}
+
+void DrawAABB(const AABB& aabb, const Matrix4x4& viewProjectionMatrix, const Matrix4x4 viewportMatrix, uint32_t color)
+{
+	Vector3 vertices[8] = {
+
+		{aabb.min.x,aabb.min.y,aabb.min.z},
+		{aabb.min.x,aabb.max.y,aabb.min.z},
+		{aabb.min.x,aabb.max.y,aabb.max.z},
+		{aabb.min.x,aabb.min.y,aabb.max.z},
+
+		{aabb.max.x,aabb.min.y,aabb.min.z},
+		{aabb.max.x,aabb.max.y,aabb.min.z},
+		{aabb.max.x,aabb.max.y,aabb.max.z},
+		{aabb.max.x,aabb.min.y,aabb.max.z},
+	};
+	Vector3 screenVertices[8];
+	for (uint32_t index = 0; index < 8; ++index){
+
+		screenVertices[index] = Transform(Transform(vertices[index], viewProjectionMatrix), viewportMatrix);
+
+	}
+
+	std::pair<uint32_t, uint32_t>indices[12] = {
+		{0,1},
+		{1,2},
+		{2,3},
+		{3,0},
+
+		{4,5},
+		{5,6},
+		{6,7},
+		{7,4},
+
+		{0,4},
+		{1,5},
+		{2,6},
+		{3,7},
+	};
+	for (auto& index : indices) {
+		Novice::DrawLine(
+			int(screenVertices[index.first].x), int(screenVertices[index.first].y),
+			int(screenVertices[index.second].x), int(screenVertices[index.second].y), color);
+	}
 }
 
 
