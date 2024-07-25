@@ -603,6 +603,20 @@ bool IsCollision(const AABB& aabb1, const AABB& aabb2)
 	return false;
 }
 
+bool IsCollision(const AABB& aabb, const Sphere& s)
+{
+	Vector3 closestPoint{
+		std::clamp(s.center.x,aabb.min.x,aabb.max.x),
+		std::clamp(s.center.y,aabb.min.y,aabb.max.y),
+		std::clamp(s.center.z,aabb.min.z,aabb.max.z),
+	};
+	float distance = Length(Subtract(closestPoint, s.center));
+	if (distance <= s.radius) {
+		return true;
+	}
+	return false;
+}
+
 Vector3 Perpendicular(const Vector3& v)
 {
 	if (v.x != 0.0f || v.y != 0.0f) {

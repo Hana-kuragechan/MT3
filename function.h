@@ -4,6 +4,7 @@
 #include <math.h>
 #include <assert.h>
 #include <Novice.h>
+#include<algorithm>
 
 struct Vector3 {
 	float x, y, z;
@@ -100,6 +101,7 @@ bool IsCollision(const Sphere& s, const Plane& p);//球と平面
 bool IsCollision(const Segment& s, const Plane& p);
 bool IsCollision(const Triangle& t, const Segment& s);
 bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+bool IsCollision(const AABB& aabb, const Sphere& s);
 
 Vector3 Perpendicular(const Vector3& v);
 void DrawPlane(const Plane& p, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
