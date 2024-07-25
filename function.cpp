@@ -559,6 +559,40 @@ bool IsCollision(const Segment& s, const Plane& p)
 
 }
 
+template<typename tLine>bool IsCollision(const Triangle& T, const tLine& line)
+{
+	Vector3 v01 = Subtract(T.vertices[1], T.vertices[0]);
+	Vector3 v12 = Subtract(T.vertices[2], T.vertices[1]);
+	Vector3 normal = Normalize(Cross(v01, v12));
+	Plane plane{ .normal = normal,.distance = Dot(T.vertices[0],normal) };
+	float dot = Dot(plane.normal, line.diff);
+	if (dot == 0.0f) {
+		return false;
+	}
+	float t = (plane.distance - Dot(line.origin, plane.normal)) / dot;
+	if ((t < tLine::kTMin) || (tLine::kTMax < t)) {
+		return false;
+	}
+
+	Vector3 intersect = Add(line.origin, Multiply(t, line.diff));
+	Vector3 v1p = Subtract(intersect, T.vertices[1]);
+	if (Dot(Cross(v01, v1p), normal) < 0.0f) {
+		return false;
+	}
+
+	Vector3 v2p = Subtract(intersect, T.vertices[2]);
+	if (Dot(Cross(v12, v2p), normal) < 0.0f) {
+		return false;
+	}
+
+	Vector3 v0p = Subtract(intersect, T.vertices[0]);
+	Vector3 v20 = Subtract(T.vertices[0], T.vertices[2]);
+	if (Dot(Cross(v20, v0p), normal) < 0.0f) {
+		return false;
+	}
+	return true;
+}
+
 Vector3 Perpendicular(const Vector3& v)
 {
 	if (v.x != 0.0f || v.y != 0.0f) {
@@ -587,6 +621,19 @@ void DrawPlane(const Plane& p, const Matrix4x4& viewProjectionMatrix, const Matr
 	Novice::DrawLine(int(points[1].x), int(points[1].y), int(points[2].x), int(points[2].y), color);
 	Novice::DrawLine(int(points[3].x), int(points[3].y), int(points[1].x), int(points[1].y), color);
 	Novice::DrawLine(int(points[3].x), int(points[3].y), int(points[0].x), int(points[0].y), color);
+}
+
+void DrawTriangle(const Triangle& t, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color)
+{
+	Vector3 screenVertices[3];
+	for (uint32_t i = 0; i < 3; ++i) {
+		Vector3 ndcVertex = Transform(t.vertices[i], viewProjectionMatrix);
+		screenVertices[i] = Transform(ndcVertex, viewportMatrix);
+	}
+	Novice::DrawTriangle(
+		int(screenVertices[0].x), int(screenVertices[0].y), int(screenVertices[1].x), int(screenVertices[1].y),
+		int(screenVertices[2].x), int(screenVertices[2].y), color, kFillModeSolid
+	);
 }
 
 
