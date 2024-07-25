@@ -92,7 +92,7 @@ Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 bool IsCollision(const Sphere& s1, const Sphere& s2);//球と球
 bool IsCollision(const Sphere& s, const Plane& p);//球と平面
 bool IsCollision(const Segment& s, const Plane& p);
-template<typename tLine>bool IsCollision(const Triangle& t, const tLine& line);
+bool IsCollision(const Triangle& t, const Segment& s);
 Vector3 Perpendicular(const Vector3& v);
 void DrawPlane(const Plane& p, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
 void DrawTriangle(const Triangle& t, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);

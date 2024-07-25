@@ -559,22 +559,22 @@ bool IsCollision(const Segment& s, const Plane& p)
 
 }
 
-template<typename tLine>bool IsCollision(const Triangle& T, const tLine& line)
+bool IsCollision(const Triangle& T, const Segment& s)
 {
 	Vector3 v01 = Subtract(T.vertices[1], T.vertices[0]);
 	Vector3 v12 = Subtract(T.vertices[2], T.vertices[1]);
 	Vector3 normal = Normalize(Cross(v01, v12));
 	Plane plane{ .normal = normal,.distance = Dot(T.vertices[0],normal) };
-	float dot = Dot(plane.normal, line.diff);
+	float dot = Dot(plane.normal, s.diff);
 	if (dot == 0.0f) {
 		return false;
 	}
-	float t = (plane.distance - Dot(line.origin, plane.normal)) / dot;
-	if ((t < tLine::kTMin) || (tLine::kTMax < t)) {
+	float t = (plane.distance - Dot(s.origin, plane.normal)) / dot;
+	if ((t < s.origin.x) || (s.diff.x < t)) {
 		return false;
 	}
 
-	Vector3 intersect = Add(line.origin, Multiply(t, line.diff));
+	Vector3 intersect = Add(s.origin, Multiply(t, s.diff));
 	Vector3 v1p = Subtract(intersect, T.vertices[1]);
 	if (Dot(Cross(v01, v1p), normal) < 0.0f) {
 		return false;
@@ -632,7 +632,7 @@ void DrawTriangle(const Triangle& t, const Matrix4x4& viewProjectionMatrix, cons
 	}
 	Novice::DrawTriangle(
 		int(screenVertices[0].x), int(screenVertices[0].y), int(screenVertices[1].x), int(screenVertices[1].y),
-		int(screenVertices[2].x), int(screenVertices[2].y), color, kFillModeSolid
+		int(screenVertices[2].x), int(screenVertices[2].y), color, kFillModeWireFrame
 	);
 }
 
