@@ -617,6 +617,43 @@ bool IsCollision(const AABB& aabb, const Sphere& s)
 	return false;
 }
 
+bool IsCollision(const AABB& aabb, const Segment& s)
+{
+	Vector3 mins;
+	mins.x = (aabb.min.x - s.origin.x) / s.diff.x;
+	mins.y = (aabb.min.y - s.origin.y) / s.diff.y;
+	mins.z = (aabb.min.z - s.origin.z) / s.diff.z;
+
+	Vector3 maxs;
+	maxs.x = (aabb.max.x - s.origin.x) / s.diff.x;
+	maxs.y = (aabb.max.y - s.origin.y) / s.diff.y;
+	maxs.z = (aabb.max.z - s.origin.z) / s.diff.z;
+
+	Vector3 nears;
+	nears.x = (std::min)(mins.x, maxs.x);
+	nears.y = (std::min)(mins.y, maxs.y);
+	nears.z = (std::min)(mins.z, maxs.z);
+
+	Vector3 fars;
+	fars.x = (std::max)(mins.x, maxs.x);
+	fars.y = (std::max)(mins.y, maxs.y);
+	fars.z = (std::max)(mins.z, maxs.z);
+
+	float tMin = (std::max)(nears.x, (std::max)(nears.y, nears.z));
+	float tMax = (std::min)(fars.x, (std::min)(fars.y, fars.z));
+
+	if (tMin <= tMax) {
+		if ((tMin * tMax)< 0.0f){
+			return true;
+		}
+		if (s.origin.x <= tMin && tMin <= s.diff.x ||
+			s.origin.x <= tMax && tMax <= s.diff.x) {
+			return true;
+		}
+	}
+	return false;
+}
+
 Vector3 Perpendicular(const Vector3& v)
 {
 	if (v.x != 0.0f || v.y != 0.0f) {

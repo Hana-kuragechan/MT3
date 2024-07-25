@@ -17,13 +17,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	AABB aabb{
 		.min{-0.5f, -0.5f, -0.5f},
-		.max{0.0f, 0.0f, 0.0f},
+		.max{0.5f, 0.5f, 0.5f},
 	};
 
-	Sphere sphere = { {0.0f, 0.0f, 0.0f}, 1.0f };
+	Segment segment{
+		.origin{-0.7f,0.3f,0.0f},
+		.diff{2.0f,-0.5f,0.0f},
+	};
 	
 	uint32_t color = WHITE;
-
+	Vector3 start;
+	Vector3 end;
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
@@ -50,7 +54,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 viewportMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
 
 
-		if (IsCollision(aabb, sphere)) {
+		if (IsCollision(aabb, segment)) {
 			color = RED;
 		}
 		else {
@@ -61,8 +65,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		ImGui::DragFloat3("aabb.min.", &aabb.min.x, 0.01f);
 		ImGui::DragFloat3("aabb.max.", &aabb.max.x, 0.01f);
-		ImGui::DragFloat3("sphere.center", &sphere.center.x, 0.01f);
-		ImGui::DragFloat("sphere.radius", &sphere.radius, 0.01f);
+		ImGui::DragFloat3("segment.origin", &segment.origin.x, 0.01f);
+		ImGui::DragFloat3("segment.diff", &segment.diff.x, 0.01f);
 
 		aabb.min.x = (std::min)(aabb.min.x, aabb.max.x);
 		aabb.min.y = (std::min)(aabb.min.y, aabb.max.y);
@@ -71,7 +75,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		aabb.max.y = (std::max)(aabb.min.y, aabb.max.y);
 		aabb.max.z = (std::max)(aabb.min.z, aabb.max.z);
 
-	
+		start = Transform(Transform(segment.origin, worldViewProjectionMatrix), viewportMatrix);
+		end = Transform(Transform(Add(segment.origin, segment.diff), worldViewProjectionMatrix), viewportMatrix);
 		///
 		/// ↑更新処理ここまで
 		///
@@ -80,8 +85,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		DrawAABB(aabb, worldViewProjectionMatrix, viewportMatrix, color);
-		DrawSphere(sphere, worldViewProjectionMatrix, viewportMatrix, WHITE);
+		DrawAABB(aabb, worldViewProjectionMatrix, viewportMatrix, WHITE);
+		Novice::DrawLine(int(start.x), int(start.y), int(end.x), int(end.y), color);
 		DrawGrid(worldViewProjectionMatrix, viewportMatrix);
 
 		///
